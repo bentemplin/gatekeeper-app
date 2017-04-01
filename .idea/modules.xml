@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GateKeeper.iml" filepath="$PROJECT_DIR$/GateKeeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gatekeeper-app-master.iml" filepath="$PROJECT_DIR$/gatekeeper-app-master.iml" />
     </modules>
   </component>
 </project>
