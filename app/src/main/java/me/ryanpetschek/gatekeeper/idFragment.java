@@ -2,14 +2,25 @@ package me.ryanpetschek.gatekeeper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 /**
@@ -72,6 +83,7 @@ public class idFragment extends Fragment {
         // Inflate the layout for this fragment
 
         v = inflater.inflate(R.layout.fragment_id, container, false);
+        ImageView imageView = (ImageView) v.findViewById(R.id.userImage);
         TextView nameText = (TextView) v.findViewById(R.id.txtName);
         TextView dobText = (TextView) v.findViewById(R.id.txtDateOfBirth);
         TextView occupationText = (TextView) v.findViewById(R.id.txtOccupation);
@@ -79,17 +91,58 @@ public class idFragment extends Fragment {
         TextView phoneText = (TextView) v.findViewById(R.id.txtPhone);
 
         String name = settings.getString("name", "not set");
+        String imgRef = settings.getString("imageUrl", "not set");
         String dob = settings.getString("DOB", "not set");
         String occ = settings.getString("Occupation", "not set");
         String add = settings.getString("Address", "not set");
         String pnum = settings.getString("PhoneNumber", "not set");
 
         nameText.setText(name);
+        new DownloadImagesTask(imageView).execute(imgRef);
         dobText.setText(dob);
         occupationText.setText(occ);
         addressText.setText(add);
         phoneText.setText(pnum);
         return v;
+    }
+
+    private class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
+
+        private ImageView imageView;
+
+        public DownloadImagesTask(ImageView view) {
+            this.imageView = view;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            return download_Image(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+
+
+        private Bitmap download_Image(String url) {
+            Bitmap bm = null;
+            try {
+                URL aURL = new URL(url);
+                URLConnection conn = aURL.openConnection();
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                bm = BitmapFactory.decodeStream(bis);
+                bis.close();
+                is.close();
+            } catch (IOException e) {
+                Log.e("Hub","Error getting the image from server : " + e.getMessage().toString());
+            }
+            return bm;
+        }
+
+
     }
 
     public void setSettings(SharedPreferences settings) {

@@ -74,13 +74,12 @@ tools:context="me.ryanpetschek.gatekeeper.idFragment">
         android:paddingRight="5dp"
         android:paddingTop="5dp"
         android:src="@drawable/rikesh"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="100dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="100dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.557" />
+        android:layout_marginTop="16dp" />
 
     <TextView
         android:id="@+id/txtDateOfBirthLabel"
