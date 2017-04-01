@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.Intent;
 
 
 /**
@@ -58,6 +59,8 @@ public class nearbyFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Intent launchMap = new Intent(getActivity(), Nearby.class);
+        getActivity().startActivity(launchMap);
     }
 
     @Override

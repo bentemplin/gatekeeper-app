@@ -1,7 +1,9 @@
 package me.ryanpetschek.gatekeeper;
 
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -11,26 +13,28 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 
 
-public class Nearby extends FragmentActivity implements OnMapReadyCallback {
+public class Nearby extends FragmentActivity implements OnMapReadyCallback,
+        nearbyFragment.OnFragmentInteractionListener {
     private final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private LocationManager mLocMan;
     private Location mLoc;
     private GoogleMap mMap;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle("Nearby Buildings");
+
         mLocMan = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        getActionBar().setTitle("Nearby Buildings");
         setContentView(R.layout.activity_nearby);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -50,30 +54,74 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        getLocationPermission();
+        //getLocationPermission();
         mMap = googleMap;
-        if (Build.VERSION.SDK_INT >= 23) {
-            if ((checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
-                mLoc = mLocMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQUEST_CODE_ASK_PERMISSIONS);
 
-        // Add a marker in Sydney and move the camera
-        mMap.setMyLocationEnabled(true);
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng me = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
+//        mMap.addMarker(new MarkerOptions().position(me).title("Me"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(me));
     }
 
 
-    public void getLocationPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-        int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                        REQUEST_CODE_ASK_PERMISSIONS);
+//    public void getLocationPermission() {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//        int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+//        if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+//                        REQUEST_CODE_ASK_PERMISSIONS);
+//            }
+//            return;
+//        }
+//    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // locations-related task you need to do.
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        mLoc = mLocMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        mMap.setMyLocationEnabled(true);
+                        LatLng me = new LatLng(mLoc.getLatitude(), mLoc.getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(me).title("Me"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(me));
+                        return;
+                    }
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            } default: {
+                System.out.println(requestCode);
             }
-            return;
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //empty b/c not implemented
     }
 }
