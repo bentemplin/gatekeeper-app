@@ -61,7 +61,7 @@ public class SignInActivity extends AppCompatActivity {
     protected KeyPair generateKeys() {
         ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
         try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "BC");
+            KeyPairGenerator g = KeyPairGenerator.getInstance("SHA256withECDSA", "BC");
             g.initialize(specs, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
             return pair;
