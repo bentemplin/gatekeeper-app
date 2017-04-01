@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 /**
@@ -32,7 +34,10 @@ public class accountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
+    private EditText dobb;
+    private EditText occb;
+    private EditText addb;
+    private EditText pnumb;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,9 +73,8 @@ public class accountFragment extends Fragment {
 
     }
 
-    public void settSettings(SharedPreferences settings, SharedPreferences.Editor editor) {
+    public void settSettings(SharedPreferences settings) {
         this.settings = settings;
-        this.editor = editor;
     }
 
     public void updateUI() {
@@ -79,36 +83,47 @@ public class accountFragment extends Fragment {
         String add = settings.getString("Address", "");
         String pnum = settings.getString("PhoneNumber", "");
 
-        EditText dobb = (EditText) v.findViewById(R.id.set_DOB);
-        EditText occb = (EditText) v.findViewById(R.id.set_Occ);
-        EditText addb = (EditText) v.findViewById(R.id.set_Add);
-        EditText pnumb = (EditText) v.findViewById(R.id.set_Phone);
+        dobb = (EditText) v.findViewById(R.id.set_DOB);
+        occb = (EditText) v.findViewById(R.id.set_Occ);
+        addb = (EditText) v.findViewById(R.id.set_Add);
+        pnumb = (EditText) v.findViewById(R.id.set_Phone);
 
-        System.out.println("HIIII: " + dob);
-
-        dobb.setText("Hint me baybe");
-        occb.setHint(occ);
-        addb.setHint(add);
-        pnumb.setHint(pnum);
+        dobb.setText(dob);
+        occb.setText(occ);
+        addb.setText(add);
+        pnumb.setText(pnum);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater, container, savedInstanceState);
         v = inflater.inflate(R.layout.fragment_account, container, false);
 
         Button cb = (Button) v.findViewById(R.id.button_commit);
         Button ub = (Button) v.findViewById(R.id.undo_Changes);
         cb.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("DOB", dobb.getText().toString());
+                editor.putString("Occupation", occb.getText().toString());
+                editor.putString("Address", addb.getText().toString());
+                editor.putString("PhoneNumber", pnumb.getText().toString());
+                editor.commit();
+            }
+        });
 
+        ub.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("Hi", "Clicked----------------");
+                updateUI();
             }
         });
 
         updateUI();
 
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

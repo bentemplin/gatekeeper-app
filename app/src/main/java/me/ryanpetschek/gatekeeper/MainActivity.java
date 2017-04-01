@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -113,12 +114,15 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = idFragment.class;
         }
 
+        Log.d("What", "Whats going on");
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
 
             if (fragment instanceof accountFragment) {
                 SharedPreferences settings = getSharedPreferences("GK_settings", 0);
-                ((accountFragment) fragment).settSettings(settings, settings.edit());
+                ((accountFragment) fragment).settSettings(settings);
+                Log.d("What", "Hello is going on");
             }
         } catch (Exception e) {
             e.printStackTrace();
