@@ -5,7 +5,6 @@
         <item
             android:id="@+id/nav_id"
             android:icon="@drawable/ic_id"
-            android:checked="true"
             android:title="Your ID" />
         <item
             android:id="@+id/nav_nearby"
