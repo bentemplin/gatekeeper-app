@@ -23,14 +23,17 @@
 
     <item android:title="Permissions">
         <menu>
-            <item
-                android:id="@+id/nav_perm_given"
-                android:icon="@drawable/ic_given"
-                android:title="Given" />
-            <item
-                android:id="@+id/nav_perm_received"
-                android:icon="@drawable/ic_received"
-                android:title="Received" />
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_perm_given"
+                    android:icon="@drawable/ic_given"
+                    android:title="Given" />
+                <item
+                    android:id="@+id/nav_perm_received"
+                    android:icon="@drawable/ic_received"
+                    android:title="Received" />
+            </group>
         </menu>
     </item>
 
