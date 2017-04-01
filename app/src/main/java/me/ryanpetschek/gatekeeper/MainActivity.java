@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,11 +30,14 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flContent, new idFragment());
+        ft.commit();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -122,9 +126,6 @@ public class MainActivity extends AppCompatActivity
         item.setChecked(true);
         setTitle(item.getTitle());
         drawer.closeDrawers();
-        //
-        //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
