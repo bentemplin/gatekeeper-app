@@ -35,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
         final AlertDialog alertDialog  = new AlertDialog.Builder(this).create();
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Validate inputs
+                // Validate inputs
                 String name = nameField.getText().toString().trim();
                 String pictureUrl = pictureUrlField.getText().toString().trim();
                 if (name.length() == 0 || pictureUrl.length() == 0) {
@@ -66,14 +66,11 @@ public class SignInActivity extends AppCompatActivity {
             KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "SC");
             g.initialize(specs, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
-            //Log.d("SUCCESS!!!!!!!", "\n\n\nLesssssssssssgoooooooooo\n\n\n");
             return pair;
         }
         catch (java.security.NoSuchAlgorithmException | java.security.NoSuchProviderException | java.security.InvalidAlgorithmParameterException err) {
             Log.e("KeyGen", err.getMessage());
             err.printStackTrace();
-        }
-        finally {
             return null;
         }
     }
