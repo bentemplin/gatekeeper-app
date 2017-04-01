@@ -11,8 +11,8 @@
         android:paddingTop="22dp"
         android:paddingLeft="24dp"
         android:layout_gravity="top"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="185dp"
+        android:layout_height="185dp"
         android:src="@drawable/rikesh"/>
 
 
