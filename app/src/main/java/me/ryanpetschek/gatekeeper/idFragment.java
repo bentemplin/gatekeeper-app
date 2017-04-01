@@ -72,16 +72,19 @@ public class idFragment extends Fragment {
         // Inflate the layout for this fragment
 
         v = inflater.inflate(R.layout.fragment_id, container, false);
+        TextView nameText = (TextView) v.findViewById(R.id.txtName);
         TextView dobText = (TextView) v.findViewById(R.id.txtDateOfBirth);
         TextView occupationText = (TextView) v.findViewById(R.id.txtOccupation);
         TextView addressText = (TextView) v.findViewById(R.id.txtAddress);
         TextView phoneText = (TextView) v.findViewById(R.id.txtPhone);
 
+        String name = settings.getString("name", "not set");
         String dob = settings.getString("DOB", "not set");
         String occ = settings.getString("Occupation", "not set");
         String add = settings.getString("Address", "not set");
         String pnum = settings.getString("PhoneNumber", "not set");
 
+        nameText.setText(name);
         dobText.setText(dob);
         occupationText.setText(occ);
         addressText.setText(add);
