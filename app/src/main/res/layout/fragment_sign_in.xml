@@ -9,14 +9,14 @@
 
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/name"
         android:layout_width="319dp"
         android:layout_height="45dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="114dp"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Name"
         android:inputType="textPersonName"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,27 +38,27 @@
         android:orientation="horizontal" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/photoUrl"
         android:layout_width="322dp"
         android:layout_height="45dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="25dp"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword|numberPassword"
+        android:hint="Photo url"
+        android:inputType="text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <Button
-        android:id="@+id/signin"
+        android:id="@+id/signup"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="25dp"
-        android:text="Sign In"
+        android:text="Sign Up"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/photoUrl" />
 
 </android.support.constraint.ConstraintLayout>
