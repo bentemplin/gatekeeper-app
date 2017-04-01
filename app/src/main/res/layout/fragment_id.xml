@@ -1,9 +1,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="me.ryanpetschek.gatekeeper.idFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/userImage"
+        android:paddingTop="24dp"
+        android:paddingLeft="24dp"
+        android:layout_gravity="top"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:src="@drawable/rikesh"/>
+
 
 </FrameLayout>
