@@ -17,13 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Your name"
+        android:text="George P. Burdell"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your key's fingerprint"
+        android:text="George's key's fingerprint"
         android:id="@+id/textView" />
 
 </LinearLayout>
