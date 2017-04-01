@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = idFragment.class;
         } else if (id == R.id.nav_nearby) {
             fragmentClass = nearbyFragment.class;
-        } else if (id == R.id.nav_network) {
+        } /*selse if (id == R.id.nav_network) {
             fragmentClass = networkFragment.class;
-        } /*else if (id == R.id.nav_account) {
+        } */else if (id == R.id.nav_account) {
             fragmentClass = accountFragment.class;
-        }*/ else if (id == R.id.nav_perm_given) {
+        } else if (id == R.id.nav_perm_given) {
             fragmentClass = permGivenFragment.class;
         } else if (id == R.id.nav_perm_received) {
             fragmentClass = permReceivedFragment.class;
