@@ -11,12 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.webkit.URLUtil;
 
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.spec.ECParameterSpec;
+import org.spongycastle.jce.ECNamedCurveTable;
+import org.spongycastle.jce.spec.ECParameterSpec;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
+import java.security.Security;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
         final AlertDialog alertDialog  = new AlertDialog.Builder(this).create();
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Validate inputs
+                //Validate inputs
                 String name = nameField.getText().toString().trim();
                 String pictureUrl = pictureUrlField.getText().toString().trim();
                 if (name.length() == 0 || pictureUrl.length() == 0) {
@@ -59,15 +60,18 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     protected KeyPair generateKeys() {
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 3);
         ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
         try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance("SHA256withECDSA", "BC");
+            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "SC");
             g.initialize(specs, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
+            //Log.d("SUCCESS!!!!!!!", "\n\n\nLesssssssssssgoooooooooo\n\n\n");
             return pair;
         }
         catch (java.security.NoSuchAlgorithmException | java.security.NoSuchProviderException | java.security.InvalidAlgorithmParameterException err) {
             Log.e("KeyGen", err.getMessage());
+            err.printStackTrace();
         }
         finally {
             return null;
