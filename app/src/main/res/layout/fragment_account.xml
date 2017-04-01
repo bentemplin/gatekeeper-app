@@ -33,7 +33,8 @@
             android:hint="(770) 324-0012"
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@+id/set_Add"
-            tools:layout_editor_absoluteX="124dp" />
+            android:layout_marginRight="30dp"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/set_Add_Label"
@@ -69,29 +70,33 @@
             android:hint="Programmer"
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@+id/set_DOB"
-            tools:layout_editor_absoluteX="124dp" />
+            android:layout_marginRight="30dp"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <EditText
             android:id="@+id/set_Add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="23dp"
             android:ems="10"
             android:hint="122 Bobby Dodd Ln"
             android:inputType="text|textPostalAddress"
             app:layout_constraintTop_toBottomOf="@+id/set_Occ"
-            tools:layout_editor_absoluteX="124dp" />
+            android:layout_marginRight="30dp"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/set_DOB_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date of birth:"
-            tools:layout_editor_absoluteY="27dp"
             app:layout_constraintRight_toLeftOf="@+id/set_DOB"
             android:layout_marginRight="29dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="39dp"
+            app:layout_constraintHorizontal_bias="0.6" />
 
         <EditText
             android:id="@+id/set_DOB"
@@ -100,8 +105,10 @@
             android:ems="10"
             android:hint="05/05/1998"
             android:inputType="text|date"
-            tools:layout_editor_absoluteX="124dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:layout_marginRight="30dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="25dp" />
 
         <Button
             android:id="@+id/button_commit"

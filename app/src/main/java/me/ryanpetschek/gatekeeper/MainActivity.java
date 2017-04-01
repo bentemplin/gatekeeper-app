@@ -1,6 +1,7 @@
 package me.ryanpetschek.gatekeeper;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -114,6 +115,11 @@ public class MainActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+
+            if (fragment instanceof accountFragment) {
+                SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+                ((accountFragment) fragment).settSettings(settings, settings.edit());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
