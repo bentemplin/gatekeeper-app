@@ -1,13 +1,127 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="me.ryanpetschek.gatekeeper.accountFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/set_Phone_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="50dp"
+            android:text="Phone #:"
+            app:layout_constraintHorizontal_bias="0.258"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Add"
+            app:layout_constraintTop_toBottomOf="@+id/set_Add_Label" />
+
+        <EditText
+            android:id="@+id/set_Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="(770) 324-0012"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@+id/set_Add"
+            tools:layout_editor_absoluteX="124dp" />
+
+        <TextView
+            android:id="@+id/set_Add_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="51dp"
+            android:text="Address:"
+            app:layout_constraintHorizontal_bias="0.258"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Add"
+            app:layout_constraintTop_toBottomOf="@+id/set_Occ_Label" />
+
+        <TextView
+            android:id="@+id/set_Occ_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="54dp"
+            android:text="Occupation:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Add"
+            app:layout_constraintTop_toBottomOf="@+id/set_DOB_label" />
+
+        <EditText
+            android:id="@+id/set_Occ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:ems="10"
+            android:hint="Programmer"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@+id/set_DOB"
+            tools:layout_editor_absoluteX="124dp" />
+
+        <EditText
+            android:id="@+id/set_Add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:ems="10"
+            android:hint="122 Bobby Dodd Ln"
+            android:inputType="text|textPostalAddress"
+            app:layout_constraintTop_toBottomOf="@+id/set_Occ"
+            tools:layout_editor_absoluteX="124dp" />
+
+        <TextView
+            android:id="@+id/set_DOB_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of birth:"
+            tools:layout_editor_absoluteY="27dp"
+            app:layout_constraintRight_toLeftOf="@+id/set_DOB"
+            android:layout_marginRight="29dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <EditText
+            android:id="@+id/set_DOB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="05/05/1998"
+            android:inputType="text|date"
+            tools:layout_editor_absoluteX="124dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <Button
+            android:id="@+id/button_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="65dp"
+            android:text="Commit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <Button
+            android:id="@+id/undo_Changes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="65dp"
+            android:text="Undo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>
