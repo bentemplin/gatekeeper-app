@@ -11,16 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.math.ec.ECCurve;
-import org.bouncycastle.jce.spec.ECParameterSpec;
-
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECParameterSpec;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -43,20 +39,23 @@ public class SignInActivity extends AppCompatActivity {
 
     protected KeyPair generateKeys() {
         ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
-        KeyPairGenerator g = null;
         try {
-            g = KeyPairGenerator.getInstance("ECSDA", "BC");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        }
-        try {
+            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "BC");
             g.initialize(specs, new SecureRandom());
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
+            KeyPair pair = g.generateKeyPair();
+            return pair;
         }
-        return g.generateKeyPair();
-    }
+        catch (java.security.NoSuchAlgorithmException err) {
 
+        }
+        catch (java.security.NoSuchProviderException err) {
+
+        }
+        catch (java.security.InvalidAlgorithmParameterException err) {
+
+        }
+        finally {
+            return null;
+        }
+    }
 }
