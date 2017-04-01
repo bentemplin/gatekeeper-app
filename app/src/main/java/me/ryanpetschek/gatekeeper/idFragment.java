@@ -1,12 +1,15 @@
 package me.ryanpetschek.gatekeeper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -26,6 +29,9 @@ public class idFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private SharedPreferences settings;
+    private View v;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +70,27 @@ public class idFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_id, container, false);
+
+        v = inflater.inflate(R.layout.fragment_id, container, false);
+        TextView dobText = (TextView) v.findViewById(R.id.txtDateOfBirth);
+        TextView occupationText = (TextView) v.findViewById(R.id.txtOccupation);
+        TextView addressText = (TextView) v.findViewById(R.id.txtAddress);
+        TextView phoneText = (TextView) v.findViewById(R.id.txtPhone);
+
+        String dob = settings.getString("DOB", "not set");
+        String occ = settings.getString("Occupation", "not set");
+        String add = settings.getString("Address", "not set");
+        String pnum = settings.getString("PhoneNumber", "not set");
+
+        dobText.setText(dob);
+        occupationText.setText(occ);
+        addressText.setText(add);
+        phoneText.setText(pnum);
+        return v;
+    }
+
+    public void setSettings(SharedPreferences settings) {
+        this.settings = settings;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

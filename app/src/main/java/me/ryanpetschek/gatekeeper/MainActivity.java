@@ -1,16 +1,11 @@
 package me.ryanpetschek.gatekeeper;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,7 +33,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContent, new idFragment());
+        idFragment fragment = new idFragment();
+        SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+        fragment.setSettings(settings);
+        ft.replace(R.id.flContent, fragment);
         ft.commit();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -114,15 +112,15 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = idFragment.class;
         }
 
-        Log.d("What", "Whats going on");
-
         try {
             fragment = (Fragment) fragmentClass.newInstance();
 
             if (fragment instanceof accountFragment) {
                 SharedPreferences settings = getSharedPreferences("GK_settings", 0);
-                ((accountFragment) fragment).settSettings(settings);
-                Log.d("What", "Hello is going on");
+                ((accountFragment) fragment).setSettings(settings);
+            } else if (fragment instanceof  idFragment) {
+                SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+                ((idFragment) fragment).setSettings(settings);
             }
         } catch (Exception e) {
             e.printStackTrace();
