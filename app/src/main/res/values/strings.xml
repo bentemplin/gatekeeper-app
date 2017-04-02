@@ -11,4 +11,7 @@
     <string name="title_activity_nearby">Map</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="title_activity_business">BusinessActivity</string>
+
+    <string name="aiddescription">GateKeeper description</string>
+    <string name="servicedesc">GateKeeper NFC service</string>
 </resources>

@@ -91,12 +91,24 @@ public class SignInActivity extends AppCompatActivity {
                     client.post(url, params, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            button.setEnabled(true);
+                            if (statusCode != 200) {
+                                alertDialog.setTitle("Error");
+                                try {
+                                    alertDialog.setMessage(response.getString("error"));
+                                }
+                                catch (JSONException err) {
+                                    alertDialog.setMessage(err.getMessage());
+                                }
+                                alertDialog.show();
+                                return;
+                            }
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putBoolean("hasAccount", true);
                             editor.putString("name", name);
                             editor.putString("imageUrl", pictureUrl);
-                            editor.putString("privateKey", Hex.toHexString(key.getPubKey()));
-                            editor.putString("publicKey", key.getPrivKey().toString());
+                            editor.putString("privateKey", key.getPrivKey().toString());
+                            editor.putString("publicKey", Hex.toHexString(key.getPubKey()));
                             editor.commit();
 
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
