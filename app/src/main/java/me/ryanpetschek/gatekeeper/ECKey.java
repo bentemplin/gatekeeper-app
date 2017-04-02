@@ -1,19 +1,10 @@
 package me.ryanpetschek.gatekeeper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import org.spongycastle.asn1.ASN1InputStream;
-import org.spongycastle.asn1.ASN1OutputStream;
-import org.spongycastle.asn1.DERBitString;
 import org.spongycastle.asn1.DERInteger;
 import org.spongycastle.asn1.DEROctetString;
 import org.spongycastle.asn1.DERSequence;
 import org.spongycastle.asn1.DERSequenceGenerator;
-import org.spongycastle.asn1.DERTaggedObject;
 import org.spongycastle.asn1.sec.SECNamedCurves;
 import org.spongycastle.asn1.x9.X9ECParameters;
 import org.spongycastle.crypto.AsymmetricCipherKeyPair;
@@ -23,6 +14,12 @@ import org.spongycastle.crypto.params.ECKeyGenerationParameters;
 import org.spongycastle.crypto.params.ECPrivateKeyParameters;
 import org.spongycastle.crypto.params.ECPublicKeyParameters;
 import org.spongycastle.crypto.signers.ECDSASigner;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 /**
  * Represents an elliptic curve keypair that we own and can use for signing transactions. Currently,
