@@ -33,7 +33,7 @@ public class SignInActivity extends AppCompatActivity {
             setContentView(R.layout.activity_sign_in);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            setTitle("Sign up");
+            setTitle("GateKeeper");
 
             final Button button = (Button) findViewById(R.id.signup);
             final EditText nameField = (EditText) findViewById(R.id.name);
