@@ -2,6 +2,7 @@ package me.ryanpetschek.gatekeeper;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +37,8 @@ import java.security.Signature;
 import javax.net.ssl.HttpsURLConnection;
 
 public class SignInActivity extends AppCompatActivity {
-    private PublicKey pub;
-    private PrivateKey priv;
+    protected PublicKey pub;
+    protected PrivateKey priv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,12 @@ public class SignInActivity extends AppCompatActivity {
                     }
 
                     KeyPair keyPair = generateKeys();
+                    if (keyPair == null) {
+                        alertDialog.setTitle("Error");
+                        alertDialog.setMessage("No Keys Generated!");
+                        alertDialog.show();
+                        return;
+                    }
                     priv = keyPair.getPrivate();
                     pub = keyPair.getPublic();
                     String pubKeyHex = Hex.toHexString(pub.getEncoded());
@@ -87,7 +94,7 @@ public class SignInActivity extends AppCompatActivity {
                         MessageDigest md = MessageDigest.getInstance("SHA-256");
                         md.update(signingPayload.getBytes()); // Change this to "UTF-16" if needed
                         digested = md.digest();
-                        Signature signature = Signature.getInstance("SHA256withECDSA", "BC");
+                        Signature signature = Signature.getInstance("ECDSA", "SC");
                         signature.initSign(priv);
                         signature.update(digested);
                         byte[] sigData = signature.sign();
@@ -95,74 +102,8 @@ public class SignInActivity extends AppCompatActivity {
                     } catch (NoSuchAlgorithmException | java.security.SignatureException
                             | java.security.InvalidKeyException
                             | java.security.NoSuchProviderException e) {}
-                    //Post everything to the Server
-                    try {
-                        URL url = new URL("https://ga.tekeeper.com");
-                        HttpsURLConnection connect = (HttpsURLConnection) url.openConnection();
-                        connect.setRequestMethod("POST");
-                        connect.setRequestProperty("User-Agent", "Fu[sic]GA");
-                        connect.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-                        connect.setRequestProperty("Content-Type", "application/json");
-                        connect.setRequestProperty("Accept", "application/json");
 
-                        JSONObject payload = new JSONObject();
-
-                        try {
-                            payload.put("name", name);
-                            payload.put("pictureURL", pictureUrl);
-                            payload.put("publicKey", pubKeyHex);
-                            payload.put("signature", sigHex);
-                        } catch(org.json.JSONException err) {
-                        }
-
-                        //Initiate the post
-                        connect.setDoOutput(true);
-                        DataOutputStream write = new DataOutputStream(connect.getOutputStream());
-                        write.writeBytes(payload.toString());
-                        write.flush();
-                        write.close();
-
-                        //Get response data
-                        Integer respCode = connect.getResponseCode();
-                        Log.d("RESPONSE-CODE: ", respCode.toString());
-                        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(connect.getInputStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                        String finalResp = response.toString();
-
-                        //Parse the JSON
-                        JSONObject jsonData = null;
-                        try {
-                            jsonData = new JSONObject(finalResp);
-                        } catch(org.json.JSONException err) {
-
-                        }
-                        try {
-                            jsonData.getBoolean("success");
-                        } catch (org.json.JSONException e) {
-                            try {
-                                jsonData.getString("error");
-                            } catch (org.json.JSONException err) {
-                                alertDialog.setTitle("Error");
-                                alertDialog.setMessage(err.getMessage());
-                                alertDialog.show();
-                            }
-                        }
-
-                    } catch (ProtocolException err) {
-                        Log.e("ERROR", err.getMessage());
-                        err.printStackTrace();
-                    } catch (IOException err) {
-                        Log.e("ERROR", err.getMessage());
-                        err.printStackTrace();
-                    }
-
+                    new PostCrypto().execute(name, pictureUrl, pubKeyHex, sigHex);
 
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("hasAccount", true);
@@ -184,7 +125,7 @@ public class SignInActivity extends AppCompatActivity {
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 3);
         ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
         try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance("SHA256withECDSA", "SC");
+            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "SC");
             g.initialize(specs, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
             return pair;
@@ -208,5 +149,79 @@ public class SignInActivity extends AppCompatActivity {
     private String getPublicKey() {
         SharedPreferences settings = getSharedPreferences("GK_settings", 0);
         return settings.getString("publicKey", "keyNotFound");
+    }
+
+    private class PostCrypto extends AsyncTask<String, Void, String> {
+
+        public PostCrypto() {}
+        @Override
+        public String doInBackground(String ... strings ) {
+            //Post everything to the Server
+            try {
+                URL url = new URL("https://ga.tekeeper.com");
+                HttpsURLConnection connect = (HttpsURLConnection) url.openConnection();
+                connect.setRequestMethod("POST");
+                connect.setRequestProperty("User-Agent", "Fu[sic]GA");
+                connect.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                connect.setRequestProperty("Content-Type", "application/json");
+                connect.setRequestProperty("Accept", "application/json");
+
+                JSONObject payload = new JSONObject();
+
+                try {
+                    payload.put("name", strings[0]);
+                    payload.put("pictureURL", strings[1]);
+                    payload.put("publicKey", strings[2]);
+                    payload.put("signature", strings[3]);
+                } catch (org.json.JSONException err) {
+                }
+
+                //Initiate the post
+                connect.setDoOutput(true);
+                DataOutputStream write = new DataOutputStream(connect.getOutputStream());
+                write.writeBytes(payload.toString());
+                write.flush();
+                write.close();
+
+                //Get response data
+                Integer respCode = connect.getResponseCode();
+                Log.d("RESPONSE-CODE: ", respCode.toString());
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connect.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                String finalResp = response.toString();
+
+                //Parse the JSON
+                JSONObject jsonData = null;
+                try {
+                    jsonData = new JSONObject(finalResp);
+                } catch (org.json.JSONException err) {
+
+                }
+                try {
+                    jsonData.getBoolean("success");
+                    return null;
+                } catch (org.json.JSONException e) {
+                    try {
+                        return jsonData.getString("error");
+                    } catch (org.json.JSONException err) {
+                    }
+                }
+
+            } catch (ProtocolException err1) {
+                Log.e("ERROR", err1.getMessage());
+                err1.printStackTrace();
+            } catch (IOException err2) {
+                Log.e("ERROR", err2.getMessage());
+                err2.printStackTrace();
+            }
+            return null;
+        }
     }
 }
