@@ -18,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -53,6 +56,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         setTitle(navigationView.getMenu().getItem(0).getTitle());
         navigationView.getMenu().getItem(0).setChecked(true);
+
+//        TextView nameView = (TextView) findViewById(R.id.menu_Name);
+//        nameView.setText(settings.getString("name", "name not found"));
+//
+//        TextView keyView = (TextView) findViewById(R.id.menu_PublicKey);
+//        keyView.setText("Public Key");
     }
 
     @Override

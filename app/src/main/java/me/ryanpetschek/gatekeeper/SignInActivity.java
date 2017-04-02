@@ -200,5 +200,7 @@ public class SignInActivity extends AppCompatActivity {
     private void storeKeyPair(PrivateKey privKey, PublicKey pubKey) {
         String pubKeyHex = Hex.toHexString(pubKey.getEncoded());
         String privKeyHex = Hex.toHexString(privKey.getEncoded());
+        SharedPreferences.Editor settings = getSharedPreferences("GK_settings", 0).edit();
+        //settings.putString(privKey);
     }
 }
