@@ -1,12 +1,15 @@
 package me.ryanpetschek.gatekeeper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -22,10 +25,16 @@ public class accountFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private View v;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private SharedPreferences settings;
+    private EditText dobb;
+    private EditText occb;
+    private EditText addb;
+    private EditText pnumb;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,13 +67,59 @@ public class accountFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    public void setSettings(SharedPreferences settings) {
+        this.settings = settings;
+    }
+
+    public void updateUI() {
+        String dob = settings.getString("DOB", "");
+        String occ = settings.getString("Occupation", "");
+        String add = settings.getString("Address", "");
+        String pnum = settings.getString("PhoneNumber", "");
+
+        dobb = (EditText) v.findViewById(R.id.set_DOB);
+        occb = (EditText) v.findViewById(R.id.set_Occ);
+        addb = (EditText) v.findViewById(R.id.set_Add);
+        pnumb = (EditText) v.findViewById(R.id.set_Phone);
+
+        dobb.setText(dob);
+        occb.setText(occ);
+        addb.setText(add);
+        pnumb.setText(pnum);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        v = inflater.inflate(R.layout.fragment_account, container, false);
+
+        Button cb = (Button) v.findViewById(R.id.button_commit);
+        Button ub = (Button) v.findViewById(R.id.undo_Changes);
+        cb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("DOB", dobb.getText().toString());
+                editor.putString("Occupation", occb.getText().toString());
+                editor.putString("Address", addb.getText().toString());
+                editor.putString("PhoneNumber", pnumb.getText().toString());
+                editor.commit();
+            }
+        });
+
+        ub.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                updateUI();
+            }
+        });
+
+        updateUI();
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

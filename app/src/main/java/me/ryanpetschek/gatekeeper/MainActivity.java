@@ -1,21 +1,26 @@
 package me.ryanpetschek.gatekeeper;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
+import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -29,13 +34,23 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        idFragment fragment = new idFragment();
+        SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+        fragment.setSettings(settings);
+        ft.replace(R.id.flContent, fragment);
+        ft.commit();
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.menu_Name)).setText(settings.getString("name", "George P. Burdell"));
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.menu_PublicKey)).setText(settings.getString("publicKey", ""));
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -45,16 +60,22 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         setTitle(navigationView.getMenu().getItem(0).getTitle());
         navigationView.getMenu().getItem(0).setChecked(true);
+
+//        TextView nameView = (TextView) findViewById(R.id.menu_Name);
+//        nameView.setText(settings.getString("name", "name not found"));
+//
+//        TextView keyView = (TextView) findViewById(R.id.menu_PublicKey);
+//        keyView.setText("Public Key");
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
     }
 
     @Override
@@ -75,6 +96,11 @@ public class MainActivity extends AppCompatActivity
             case android.R.id.home:
                 drawer.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.action_delete:
+                Log.d("Hello", "Hi");
+                getSharedPreferences("GK_settings", 0).edit().clear().commit();
+                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(intent);
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -96,9 +122,9 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = idFragment.class;
         } else if (id == R.id.nav_nearby) {
             fragmentClass = nearbyFragment.class;
-        } else if (id == R.id.nav_network) {
+        } /*selse if (id == R.id.nav_network) {
             fragmentClass = networkFragment.class;
-        } else if (id == R.id.nav_account) {
+        } */else if (id == R.id.nav_account) {
             fragmentClass = accountFragment.class;
         } else if (id == R.id.nav_perm_given) {
             fragmentClass = permGivenFragment.class;
@@ -110,6 +136,14 @@ public class MainActivity extends AppCompatActivity
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+
+            if (fragment instanceof accountFragment) {
+                SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+                ((accountFragment) fragment).setSettings(settings);
+            } else if (fragment instanceof  idFragment) {
+                SharedPreferences settings = getSharedPreferences("GK_settings", 0);
+                ((idFragment) fragment).setSettings(settings);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,9 +156,6 @@ public class MainActivity extends AppCompatActivity
         item.setChecked(true);
         setTitle(item.getTitle());
         drawer.closeDrawers();
-        //
-        //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

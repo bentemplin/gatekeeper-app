@@ -1,13 +1,130 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="me.ryanpetschek.gatekeeper.accountFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/set_Phone_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Phone number:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Phone"
+            app:layout_constraintTop_toBottomOf="@+id/set_Add_Label" />
+
+        <EditText
+            android:id="@+id/set_Phone"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:inputType="phone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_Add" />
+
+        <TextView
+            android:id="@+id/set_Add_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="51dp"
+            android:text="Address:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Add"
+            app:layout_constraintTop_toBottomOf="@+id/set_Occ_Label" />
+
+        <TextView
+            android:id="@+id/set_Occ_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp"
+            android:text="Occupation:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/set_Occ"
+            app:layout_constraintTop_toBottomOf="@+id/set_DOB_label" />
+
+        <EditText
+            android:id="@+id/set_Occ"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="25dp"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_DOB"
+            android:layout_marginEnd="30dp" />
+
+        <EditText
+            android:id="@+id/set_Add"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="23dp"
+            android:ems="10"
+            android:inputType="textPostalAddress"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_Occ"
+            android:layout_marginEnd="30dp" />
+
+        <TextView
+            android:id="@+id/set_DOB_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of birth:"
+            app:layout_constraintRight_toLeftOf="@+id/set_DOB"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="39dp" />
+
+        <EditText
+            android:id="@+id/set_DOB"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="25dp"
+            android:ems="10"
+            android:inputType="date"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="30dp" />
+
+        <Button
+            android:id="@+id/button_commit"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/undo_Changes" />
+
+        <Button
+            android:id="@+id/undo_Changes"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:text="Reset"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button_commit" />
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>
