@@ -2,9 +2,7 @@ package me.ryanpetschek.gatekeeper;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,12 +12,8 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.bitcoin.NativeSecp256k1;
-import org.bitcoin.NativeSecp256k1Util;
 import org.bitcoinj.core.Sha256Hash;
-
 import org.spongycastle.util.encoders.Hex;
-import java.security.SecureRandom;
 
 import org.json.JSONException;
 import org.json.JSONObject;
