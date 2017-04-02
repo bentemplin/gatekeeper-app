@@ -1,5 +1,6 @@
 package me.ryanpetschek.gatekeeper;
 
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -76,7 +77,8 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onInfoWindowClick(Marker marker) {
-                
+                Intent intent = new Intent(Nearby.this, BusinessActivity.class);
+                startActivity(intent);
             }
         });
 
