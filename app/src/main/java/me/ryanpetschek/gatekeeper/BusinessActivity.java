@@ -1,5 +1,6 @@
 package me.ryanpetschek.gatekeeper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -46,10 +47,11 @@ public class BusinessActivity extends AppCompatActivity {
         TextView addrText = (TextView) findViewById(R.id.txtAddress);
         TextView descText = (TextView) findViewById(R.id.txtDesc);
 
-        Button requestButton = (Button) findViewById(R.id.btnRequest);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final Button requestButton = (Button) findViewById(R.id.btnRequest);
+        final Context outside = this;
         requestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                requestButton.setEnabled(false);
                 AsyncHttpClient client = new AsyncHttpClient();
                 String url = "https://gatekeeper.ryanpetschek.me/" + name.replace(" ", "-").toLowerCase() + "/api/request";
 
@@ -61,6 +63,7 @@ public class BusinessActivity extends AppCompatActivity {
                 client.post(url, params, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(outside).create();
                         if (statusCode != 200) {
                             alertDialog.setTitle("Error");
                             try {
@@ -70,14 +73,17 @@ public class BusinessActivity extends AppCompatActivity {
                                 alertDialog.setMessage(err.getMessage());
                             }
                             alertDialog.show();
+                            requestButton.setEnabled(true);
                             return;
                         }
                         alertDialog.setTitle("Success");
                         alertDialog.setMessage("Your request for access has been submitted");
+                        requestButton.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(outside).create();
                         alertDialog.setTitle("Error");
                         try {
                             alertDialog.setMessage(response.getString("error"));
@@ -86,6 +92,7 @@ public class BusinessActivity extends AppCompatActivity {
                             alertDialog.setMessage(err.getMessage());
                         }
                         alertDialog.show();
+                        requestButton.setEnabled(true);
                     }
                 });
             }
