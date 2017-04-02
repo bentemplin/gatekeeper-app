@@ -170,6 +170,8 @@ public class SignInActivity extends AppCompatActivity {
                     editor.putString("imageUrl", pictureUrl);
                     editor.commit();
 
+                    storeKeyPair(priv, pub);
+
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
@@ -196,6 +198,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void storeKeyPair(PrivateKey privKey, PublicKey pubKey) {
-
+        String pubKeyHex = Hex.toHexString(pubKey.getEncoded());
+        String privKeyHex = Hex.toHexString(privKey.getEncoded());
     }
 }
