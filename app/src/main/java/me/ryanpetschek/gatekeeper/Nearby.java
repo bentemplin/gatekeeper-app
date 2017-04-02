@@ -2,6 +2,7 @@ package me.ryanpetschek.gatekeeper;
 
 import android.content.Intent;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -22,6 +24,8 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class Nearby extends FragmentActivity implements OnMapReadyCallback,
@@ -30,7 +34,6 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
     private LocationManager mLocMan;
     private Location mLoc;
     private GoogleMap mMap;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +67,34 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
                 REQUEST_CODE_ASK_PERMISSIONS);
         mMap = googleMap;
 
-        for (Building b: Building.buildings) {
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter(){
+
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View view = getLayoutInflater().inflate(R.layout.marker_window, null);
+
+                Building currBuilding = Building.buildings.get(Integer.parseInt(marker.getTitle()));
+
+                ImageView img = (ImageView) view.findViewById(R.id.marker_imageView);
+                TextView name = (TextView) view.findViewById(R.id.marker_Name);
+                TextView add = (TextView) view.findViewById(R.id.marker_Address);
+
+                img.setImageBitmap(currBuilding.getImage());
+                name.setText(currBuilding.getName());
+                add.setText(currBuilding.getAddress());
+                return view;
+            }
+        });
+
+        for (int i = 0; i < Building.buildings.size(); i++) {
+            Building b = Building.buildings.get(i);
             LatLng loc = new LatLng(Double.parseDouble(b.getLatitude()), Double.parseDouble(b.getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(loc).title(b.getName()));
+            mMap.addMarker(new MarkerOptions().position(loc).title(i + ""));
         }
 
         LatLngBounds bounds = new LatLngBounds(new LatLng(33.75, -84.44), new LatLng(33.8, -84.34));
