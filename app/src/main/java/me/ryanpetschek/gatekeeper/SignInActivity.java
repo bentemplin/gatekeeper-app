@@ -158,7 +158,7 @@ public class SignInActivity extends AppCompatActivity {
         public String doInBackground(String ... strings ) {
             //Post everything to the Server
             try {
-                URL url = new URL("https://ga.tekeeper.com");
+                URL url = new URL("https://gatekeeper.ryanpetschek.me");
                 HttpsURLConnection connect = (HttpsURLConnection) url.openConnection();
                 connect.setRequestMethod("POST");
                 connect.setRequestProperty("User-Agent", "Fu[sic]GA");
