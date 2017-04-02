@@ -104,6 +104,8 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onInfoWindowClick(Marker marker) {
+                int building = Integer.parseInt(marker.getTitle());
+                Building passed = Building.buildings.get(building);
                 Intent intent = new Intent(Nearby.this, BusinessActivity.class);
                 startActivity(intent);
             }
