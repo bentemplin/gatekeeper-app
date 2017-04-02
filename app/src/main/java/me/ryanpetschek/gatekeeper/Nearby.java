@@ -13,12 +13,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
+import android.view.View;
 
 
 public class Nearby extends FragmentActivity implements OnMapReadyCallback,
@@ -69,6 +71,14 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
         mMap.addMarker(new MarkerOptions().position(anthem).title("Anthem Innovation Studio"));
         LatLngBounds bounds = new LatLngBounds(new LatLng(33.75, -84.44), new LatLng(33.8, -84.34));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                
+            }
+        });
 
 //        mLoc = mLocMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //        mMap.setMyLocationEnabled(true);

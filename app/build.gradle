@@ -24,16 +24,16 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile files('libs/bcprov-ext-jdk15on-156.jar')
+    compile files('libs/core-1.54.0.0.jar')
+    compile files('libs/pg-1.54.0.0.jar')
+    //compile files('libs/android-async-http-1.4.9.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.google.android.gms:play-services-maps:10.2.1'
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:gridlayout-v7:25.3.1'
-    compile files('libs/bcprov-ext-jdk15on-156.jar')
-    compile files('libs/core-1.54.0.0.jar')
-    compile files('libs/pg-1.54.0.0.jar')
     compile 'com.loopj.android:android-async-http:1.4.9'
-    //compile files('libs/android-async-http-1.4.9.jar')
+    testCompile 'junit:junit:4.12'
 }
