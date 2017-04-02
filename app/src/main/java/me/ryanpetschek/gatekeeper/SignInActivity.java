@@ -207,6 +207,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private String getPublicKey() {
         SharedPreferences settings = getSharedPreferences("GK_settings", 0);
-        
+        return settings.getString("publicKey", "keyNotFound");
     }
 }
