@@ -11,16 +11,26 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import cz.msebera.android.httpclient.Header;
+
+import static android.R.attr.button;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -38,6 +48,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        loadBusinesses();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         idFragment fragment = new idFragment();
@@ -66,6 +78,51 @@ public class MainActivity extends AppCompatActivity
 //
 //        TextView keyView = (TextView) findViewById(R.id.menu_PublicKey);
 //        keyView.setText("Public Key");
+    }
+
+    private void loadBusinesses() {
+        RequestParams params = new RequestParams();
+
+        // Upload this user to the server
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = "https://gatekeeper.ryanpetschek.me/buildings";
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        client.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+
+            public void onSuccess(int l, Header[] headers, JSONArray json) {
+                try {
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject building = json.getJSONObject(i);
+                        String name = building.getString("name");
+                        String slug = building.getString("nameSlug");
+                        String description = building.getString("description");
+                        String imageUrl = building.getString("pictureURL");
+                        JSONObject loc = building.getJSONObject("location");
+                        String address = loc.getString("address");
+                        String latitude = loc.getString("latitude");
+                        String longitude = loc.getString("longitude");
+                        new Building(name, slug, description, imageUrl, address, latitude, longitude);
+                    }
+                    int ii = 0;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                alertDialog.setTitle("Error");
+                try {
+                    alertDialog.setMessage(response.getString("error"));
+                }
+                catch (JSONException err) {
+                    alertDialog.setMessage(err.getMessage());
+                }
+                alertDialog.show();
+            }
+        });
     }
 
     @Override

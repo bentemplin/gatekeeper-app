@@ -105,8 +105,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     // Upload this user to the server
                     AsyncHttpClient client = new AsyncHttpClient();
-                    //String url = "https://gatekeeper.ryanpetschek.me/upload";
-                    String url = "http://192.168.43.233:3000/upload";
+                    String url = "https://gatekeeper.ryanpetschek.me/upload";
 
                     RequestParams params = new RequestParams();
                     params.put("name", name);
