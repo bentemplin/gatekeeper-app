@@ -75,6 +75,12 @@ public class SignInActivity extends AppCompatActivity {
                     }
 
                     KeyPair keyPair = generateKeys();
+                    if (keyPair == null) {
+                        alertDialog.setTitle("Error");
+                        alertDialog.setMessage("No Keys Generated!");
+                        alertDialog.show();
+                        return;
+                    }
                     priv = keyPair.getPrivate();
                     pub = keyPair.getPublic();
                     String pubKeyHex = Hex.toHexString(pub.getEncoded());
@@ -87,7 +93,7 @@ public class SignInActivity extends AppCompatActivity {
                         MessageDigest md = MessageDigest.getInstance("SHA-256");
                         md.update(signingPayload.getBytes()); // Change this to "UTF-16" if needed
                         digested = md.digest();
-                        Signature signature = Signature.getInstance("SHA256withECDSA", "BC");
+                        Signature signature = Signature.getInstance("ECDSA", "SC");
                         signature.initSign(priv);
                         signature.update(digested);
                         byte[] sigData = signature.sign();
@@ -184,7 +190,7 @@ public class SignInActivity extends AppCompatActivity {
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 3);
         ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
         try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance("SHA256withECDSA", "SC");
+            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "SC");
             g.initialize(specs, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
             return pair;
