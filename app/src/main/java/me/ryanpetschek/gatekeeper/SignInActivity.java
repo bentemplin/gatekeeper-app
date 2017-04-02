@@ -65,27 +65,10 @@ public class SignInActivity extends AppCompatActivity {
                         return;
                     }
 
-                    SecureRandom secureRandom = new SecureRandom();
-                    final byte[] secretKey = new byte[32];
-                    secureRandom.nextBytes(secretKey);
-
-                    final byte[] publicKey;
-                    try {
-                        publicKey = NativeSecp256k1.computePubkey(secretKey);
-                    } catch (NativeSecp256k1Util.AssertFailException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    byte[] payload = (name + pictureUrl + Hex.toHexString(publicKey)).getBytes();
+                    final ECKey key = new ECKey();
+                    byte[] payload = (name + pictureUrl + Hex.toHexString(key.getPubKey())).getBytes();
                     byte[] hashedPayload = Sha256Hash.hash(payload);
-                    byte[] signature;
-                    try {
-                        signature = NativeSecp256k1.sign(hashedPayload, secretKey);
-                    } catch (NativeSecp256k1Util.AssertFailException e) {
-                        e.printStackTrace();
-                        return;
-                    }
+                    byte[] signature = key.sign(hashedPayload);
 
                     // Upload this user to the server
                     AsyncHttpClient client = new AsyncHttpClient();
@@ -94,7 +77,7 @@ public class SignInActivity extends AppCompatActivity {
                     RequestParams params = new RequestParams();
                     params.put("name", name);
                     params.put("pictureURL", pictureUrl);
-                    params.put("publicKey", Hex.toHexString(publicKey));
+                    params.put("publicKey", Hex.toHexString(key.getPubKey()));
                     params.put("signature", Hex.toHexString(signature));
 
                     client.post(url, params, new JsonHttpResponseHandler() {
@@ -104,8 +87,8 @@ public class SignInActivity extends AppCompatActivity {
                             editor.putBoolean("hasAccount", true);
                             editor.putString("name", name);
                             editor.putString("imageUrl", pictureUrl);
-                            editor.putString("privateKey", Hex.toHexString(secretKey));
-                            editor.putString("publicKey", Hex.toHexString(publicKey));
+                            editor.putString("privateKey", Hex.toHexString(key.getPubKey()));
+                            editor.putString("publicKey", key.getPrivKey().toString());
                             editor.commit();
 
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
