@@ -63,17 +63,10 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 REQUEST_CODE_ASK_PERMISSIONS);
         mMap = googleMap;
-        /*LatLng sydney = new LatLng(33.7563, -84.3893);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Alderhold"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        LatLng hopkins = new LatLng(33.7741, -84.3913);
-        mMap.addMarker(new MarkerOptions().position(hopkins).title("Hopkins Hall"));
-        LatLng anthem = new LatLng(33.7772, -84.3891);
-        mMap.addMarker(new MarkerOptions().position(anthem).title("Anthem Innovation Studio"));*/
 
         for (Building b: Building.buildings) {
             LatLng loc = new LatLng(Double.parseDouble(b.getLatitude()), Double.parseDouble(b.getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(loc).title(b.getName() + "\n" + b.getDescription()));
+            mMap.addMarker(new MarkerOptions().position(loc).title(b.getName()));
         }
 
         LatLngBounds bounds = new LatLngBounds(new LatLng(33.75, -84.44), new LatLng(33.8, -84.34));
