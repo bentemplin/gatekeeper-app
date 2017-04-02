@@ -88,7 +88,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     //Make the signatures
                     String sigHex = "";
-                    String signingPayload = new String(name + pictureUrl + pubKeyHex);
+                    String signingPayload = name + pictureUrl + pubKeyHex;
                     byte[] digested;
                     try {
                         MessageDigest md = MessageDigest.getInstance("SHA-256");
