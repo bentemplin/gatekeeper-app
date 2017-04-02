@@ -1,12 +1,19 @@
 package me.ryanpetschek.gatekeeper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 
 /**
@@ -26,6 +33,7 @@ public class permReceivedFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String[] items;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,8 +71,20 @@ public class permReceivedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perm_received, container, false);
+        View v = inflater.inflate(R.layout.fragment_perm_received, container, false);
+        items = new String[]{"Request1", "Request2", "Request3"};
+        Activity act = getActivity();
+        ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items);
+        ListView listView = (ListView) v.findViewById(R.id.received_ListView);
+        listView.setAdapter(listAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Hello", items[position]);
+            }
+        });
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
