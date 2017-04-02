@@ -42,7 +42,7 @@ public class idFragment extends Fragment {
     private String mParam2;
     private SharedPreferences settings;
     private View v;
-
+    private Bitmap defaultMap;
 
     private OnFragmentInteractionListener mListener;
 
@@ -98,6 +98,11 @@ public class idFragment extends Fragment {
         String pnum = settings.getString("PhoneNumber", "not set");
 
         nameText.setText(name);
+        if (defaultMap != null) {
+            imageView.setImageBitmap(defaultMap);
+        } else {
+            Log.d("Hello", "Uh uh");
+        }
         new DownloadImagesTask(imageView).execute(imgRef);
         dobText.setText(dob);
         occupationText.setText(occ);
@@ -122,6 +127,7 @@ public class idFragment extends Fragment {
         @Override
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
+            defaultMap = result;
         }
 
 
