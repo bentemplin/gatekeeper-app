@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 /**
  * Created by crsch on 4/2/2017.
@@ -34,6 +35,16 @@ public class Building {
         this.longitude = longitude;
         new DownloadImagesTask(this).execute(imageUrl);
         buildings.add(this);
+    }
+
+    public static Building query(String name) {
+        for (Building b: buildings) {
+            if (b.getName().equals(name)) {
+                return b;
+            }
+        }
+
+        throw new NoSuchElementException("No such building(" + name + ")in array: " + buildings.toString());
     }
 
     public String getName() {
