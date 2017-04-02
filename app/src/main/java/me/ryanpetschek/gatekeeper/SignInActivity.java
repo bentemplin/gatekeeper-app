@@ -27,11 +27,19 @@ import com.loopj.android.http.*;
 import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity {
+
+    public static String privateKey, publicKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences settings = getSharedPreferences("GK_settings", 0);
         if (settings.getBoolean("hasAccount", false) == true) {
+            publicKey = settings.getString("publicKey", "default");
+            privateKey = settings.getString("privateKey", "default");
+            Log.d("Hello", publicKey);
+            Log.d("Hello", privateKey);
+
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);
         } else {

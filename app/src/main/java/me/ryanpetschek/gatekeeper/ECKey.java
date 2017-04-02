@@ -99,6 +99,8 @@ public class ECKey implements Serializable {
      * private keys by doing a multiply with the generator value.
      */
     public ECKey(BigInteger privKey) {
+        String privateK = SignInActivity.privateKey;
+        String publicK = SignInActivity.publicKey;
         this.priv = privKey;
         this.pub = publicKeyFromPrivate(privKey);
     }
