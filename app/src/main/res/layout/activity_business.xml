@@ -1,33 +1,124 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="me.ryanpetschek.gatekeeper.BusinessActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/txtAddressLabel"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="Address:"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtDescLabel" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <TextView
+        android:id="@+id/txtAddress"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="115 Bobby Dodd Way."
+        android:textAlignment="viewEnd"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtDesc" />
 
-    </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:id="@+id/txtDesc"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="Best residence hall at Georgia Tech."
+        android:textAlignment="viewEnd"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRequest" />
 
-    <include layout="@layout/content_business" />
+    <TextView
+        android:id="@+id/txtDescLabel"
+        android:layout_width="1050dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="Description:"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRequest" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <ImageView
+        android:id="@+id/buildingImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="top"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/common_google_signin_btn_text_dark_disabled"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/txtNameLabel"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="Name:"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtAddressLabel" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:text="Hopkins Residence Hall"
+        android:textAlignment="viewEnd"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtAddress" />
+
+    <Button
+        android:id="@+id/btnRequest"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:textAllCaps="true"
+        android:text="Request"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"/>
+</android.support.constraint.ConstraintLayout>

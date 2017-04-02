@@ -35,6 +35,8 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
     private Location mLoc;
     private GoogleMap mMap;
 
+    public static Building currentBuilding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +108,7 @@ public class Nearby extends FragmentActivity implements OnMapReadyCallback,
             public void onInfoWindowClick(Marker marker) {
                 int building = Integer.parseInt(marker.getTitle());
                 Building passed = Building.buildings.get(building);
+                currentBuilding = passed;
                 Intent intent = new Intent(Nearby.this, BusinessActivity.class);
                 startActivity(intent);
             }
