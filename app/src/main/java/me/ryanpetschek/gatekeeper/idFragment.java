@@ -100,8 +100,6 @@ public class idFragment extends Fragment {
         nameText.setText(name);
         if (defaultMap != null) {
             imageView.setImageBitmap(defaultMap);
-        } else {
-            Log.d("Hello", "Uh uh");
         }
         new DownloadImagesTask(imageView).execute(imgRef);
         dobText.setText(dob);

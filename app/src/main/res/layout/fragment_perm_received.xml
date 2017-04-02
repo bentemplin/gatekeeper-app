@@ -6,16 +6,15 @@
     tools:context="me.ryanpetschek.gatekeeper.permReceivedFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/received_SwipeRfresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/received_ListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <ListView
+            android:id="@+id/received_ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
