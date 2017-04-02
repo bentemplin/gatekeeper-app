@@ -35,7 +35,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.android.support:gridlayout-v7:25.3.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
-    //compile 'org.bitcoinj:bitcoinj-core:0.14.4'
+    compile 'org.bitcoinj:bitcoinj-core:0.14.4'
     testCompile 'junit:junit:4.12'
-    compile files('libs/bitcoinj-core-0.14.4-bundled.jar')
 }

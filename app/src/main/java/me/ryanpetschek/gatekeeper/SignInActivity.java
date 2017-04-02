@@ -99,8 +99,8 @@ public class SignInActivity extends AppCompatActivity {
                             editor.putBoolean("hasAccount", true);
                             editor.putString("name", name);
                             editor.putString("imageUrl", pictureUrl);
-                            editor.putString("privateKey", Hex.toHexString(key.getPubKey()));
-                            editor.putString("publicKey", key.getPrivKey().toString());
+                            editor.putString("privateKey", key.getPrivKey().toString());
+                            editor.putString("publicKey", Hex.toHexString(key.getPubKey()));
                             editor.commit();
 
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
