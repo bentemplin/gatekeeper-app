@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +29,7 @@ import android.widget.ListView;
  * Use the {@link permReceivedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class permReceivedFragment extends Fragment {
+public class permReceivedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,7 +38,8 @@ public class permReceivedFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String[] items;
+    private ArrayList<String> items;
+    private ReceivedListViewAdapter listAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,16 +78,22 @@ public class permReceivedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_perm_received, container, false);
-        items = new String[]{"Request1", "Request2", "Request3"};
-        Activity act = getActivity();
-        ListAdapter listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items);
-        ListView listView = (ListView) v.findViewById(R.id.received_ListView);
+        items = new ArrayList<>();
+        items.add("Request 1");
+        items.add("Request 2");
+        items.add("Request 3");
+
+        SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) v.findViewById(R.id.received_SwipeRfresh);
+        swipeRefresh.setOnRefreshListener(this);
+
+        listAdapter = new ReceivedListViewAdapter(getActivity(), android.R.layout.simple_list_item_1, items);
+        ListView listView = (ListView) swipeRefresh.findViewById(R.id.received_ListView);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Hello", items[position]);
+                //TODO: implements item clicked behavior
             }
         });
         return v;
@@ -109,6 +121,12 @@ public class permReceivedFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("Hello", "refresh");
+        listAdapter.newDataHasArrived(items);
     }
 
     /**

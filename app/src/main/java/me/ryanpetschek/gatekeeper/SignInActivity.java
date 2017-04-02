@@ -72,12 +72,14 @@ public class SignInActivity extends AppCompatActivity {
                         alertDialog.show();
                         return;
                     }
+                    button.setEnabled(false);
 
                     KeyPair keyPair = generateKeys();
                     if (keyPair == null) {
                         alertDialog.setTitle("Error");
                         alertDialog.setMessage("No Keys Generated!");
                         alertDialog.show();
+                        button.setEnabled(true);
                         return;
                     }
                     priv = keyPair.getPrivate();
@@ -137,6 +139,7 @@ public class SignInActivity extends AppCompatActivity {
                                 alertDialog.setMessage(err.getMessage());
                             }
                             alertDialog.show();
+                            button.setEnabled(true);
                         }
                     });
                 }
