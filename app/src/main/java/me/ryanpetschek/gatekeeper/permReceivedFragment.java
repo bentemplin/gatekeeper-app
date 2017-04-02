@@ -73,9 +73,10 @@ public class permReceivedFragment extends Fragment implements SwipeRefreshLayout
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_perm_received, container, false);
         items = new ArrayList<>();
-        items.add("Request 1");
-        items.add("Request 2");
-        items.add("Request 3");
+        items.add("Entrance Granted! Hopkins");
+        items.add("Entrance Denied... Hopkins");
+        items.add("Entrance Granted! Glenn");
+        items.add("Entrance Granted! Towers");
 
         SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) v.findViewById(R.id.received_SwipeRfresh);
         swipeRefresh.setOnRefreshListener(this);

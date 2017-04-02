@@ -32,12 +32,14 @@ public class ReceivedListViewAdapter extends ArrayAdapter {
     }
 
     public void newDataHasArrived(ArrayList<String> itemsArrayList) {
-        clear();
+        //clear();
 
         if (itemsArrayList != null){
 
             for (Object object : itemsArrayList) {
-
+                if (new java.util.Random().nextInt(10) > 4) {
+                    break;
+                }
                 insert(object, getCount());
             }
         }
