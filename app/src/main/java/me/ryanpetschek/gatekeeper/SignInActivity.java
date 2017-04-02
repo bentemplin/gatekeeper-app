@@ -14,30 +14,19 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.bitcoin.NativeSecp256k1;
+import org.bitcoin.NativeSecp256k1Util;
+import org.bitcoinj.core.Sha256Hash;
+
+import org.spongycastle.util.encoders.Hex;
+import java.security.SecureRandom;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.spongycastle.jce.ECNamedCurveTable;
-import org.spongycastle.jce.spec.ECParameterSpec;
-import org.spongycastle.util.encoders.Hex;
-
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.Signature;
-
 import com.loopj.android.http.*;
-
 import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity {
-    protected PublicKey pub;
-    protected PrivateKey priv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +46,7 @@ public class SignInActivity extends AppCompatActivity {
             final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    button.setEnabled(false);
                     // Validate inputs
                     final String name = nameField.getText().toString().trim();
                     final String pictureUrl = pictureUrlField.getText().toString().trim();
@@ -64,44 +54,38 @@ public class SignInActivity extends AppCompatActivity {
                         alertDialog.setTitle("Error");
                         alertDialog.setMessage("Name or photo URL cannot be left blank");
                         alertDialog.show();
+                        button.setEnabled(true);
                         return;
                     }
                     if (!URLUtil.isValidUrl(pictureUrl)) {
                         alertDialog.setTitle("Error");
                         alertDialog.setMessage("Invalid photo URL");
                         alertDialog.show();
-                        return;
-                    }
-                    button.setEnabled(false);
-
-                    KeyPair keyPair = generateKeys();
-                    if (keyPair == null) {
-                        alertDialog.setTitle("Error");
-                        alertDialog.setMessage("No Keys Generated!");
-                        alertDialog.show();
                         button.setEnabled(true);
                         return;
                     }
-                    priv = keyPair.getPrivate();
-                    pub = keyPair.getPublic();
-                    String pubKeyHex = Hex.toHexString(pub.getEncoded());
 
-                    // Make the signature
-                    String sigHex = "";
-                    String signingPayload = name + pictureUrl + pubKeyHex;
-                    byte[] digested;
+                    SecureRandom secureRandom = new SecureRandom();
+                    final byte[] secretKey = new byte[32];
+                    secureRandom.nextBytes(secretKey);
+
+                    final byte[] publicKey;
                     try {
-                        MessageDigest md = MessageDigest.getInstance("SHA-256");
-                        md.update(signingPayload.getBytes()); // Change this to "UTF-16" if needed
-                        digested = md.digest();
-                        Signature signature = Signature.getInstance("ECDSA", "SC");
-                        signature.initSign(priv);
-                        signature.update(digested);
-                        byte[] sigData = signature.sign();
-                        sigHex = Hex.toHexString(sigData);
-                    } catch (NoSuchAlgorithmException | java.security.SignatureException
-                            | java.security.InvalidKeyException
-                            | java.security.NoSuchProviderException e) {}
+                        publicKey = NativeSecp256k1.computePubkey(secretKey);
+                    } catch (NativeSecp256k1Util.AssertFailException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    byte[] payload = (name + pictureUrl + Hex.toHexString(publicKey)).getBytes();
+                    byte[] hashedPayload = Sha256Hash.hash(payload);
+                    byte[] signature;
+                    try {
+                        signature = NativeSecp256k1.sign(hashedPayload, secretKey);
+                    } catch (NativeSecp256k1Util.AssertFailException e) {
+                        e.printStackTrace();
+                        return;
+                    }
 
                     // Upload this user to the server
                     AsyncHttpClient client = new AsyncHttpClient();
@@ -110,8 +94,8 @@ public class SignInActivity extends AppCompatActivity {
                     RequestParams params = new RequestParams();
                     params.put("name", name);
                     params.put("pictureURL", pictureUrl);
-                    params.put("publicKey", pubKeyHex);
-                    params.put("signature", sigHex);
+                    params.put("publicKey", Hex.toHexString(publicKey));
+                    params.put("signature", Hex.toHexString(signature));
 
                     client.post(url, params, new JsonHttpResponseHandler() {
                         @Override
@@ -120,9 +104,9 @@ public class SignInActivity extends AppCompatActivity {
                             editor.putBoolean("hasAccount", true);
                             editor.putString("name", name);
                             editor.putString("imageUrl", pictureUrl);
+                            editor.putString("privateKey", Hex.toHexString(secretKey));
+                            editor.putString("publicKey", Hex.toHexString(publicKey));
                             editor.commit();
-
-                            storeKeyPair(priv, pub);
 
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -144,36 +128,5 @@ public class SignInActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private KeyPair generateKeys() {
-        //Generates an elliptic curve encryption key-pair with a secp256k1 curve
-        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 3);
-        ECParameterSpec specs = ECNamedCurveTable.getParameterSpec("secp256k1");
-        try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "SC");
-            g.initialize(specs, new SecureRandom());
-            KeyPair pair = g.generateKeyPair();
-            return pair;
-        }
-        catch (java.security.NoSuchAlgorithmException | java.security.NoSuchProviderException |
-                java.security.InvalidAlgorithmParameterException err) {
-            Log.e("KeyGen", err.getMessage());
-            err.printStackTrace();
-            return null;
-        }
-    }
-
-    private void storeKeyPair(PrivateKey privKey, PublicKey pubKey) {
-        String pubKeyHex = Hex.toHexString(pubKey.getEncoded());
-        String privKeyHex = Hex.toHexString(privKey.getEncoded());
-        SharedPreferences.Editor settings = getSharedPreferences("GK_settings", 0).edit();
-        settings.putString("publicKey", pubKeyHex);
-        settings.putString("privateKey", privKeyHex);
-    }
-
-    private String getPublicKey() {
-        SharedPreferences settings = getSharedPreferences("GK_settings", 0);
-        return settings.getString("publicKey", "keyNotFound");
     }
 }
