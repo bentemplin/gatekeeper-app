@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,17 +14,12 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.spongycastle.jce.ECNamedCurveTable;
 import org.spongycastle.jce.spec.ECParameterSpec;
 import org.spongycastle.util.encoders.Hex;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -34,7 +30,9 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 
-import javax.net.ssl.HttpsURLConnection;
+import com.loopj.android.http.*;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity {
     protected PublicKey pub;
@@ -60,8 +58,8 @@ public class SignInActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Validate inputs
-                    String name = nameField.getText().toString().trim();
-                    String pictureUrl = pictureUrlField.getText().toString().trim();
+                    final String name = nameField.getText().toString().trim();
+                    final String pictureUrl = pictureUrlField.getText().toString().trim();
                     if (name.length() == 0 || pictureUrl.length() == 0) {
                         alertDialog.setTitle("Error");
                         alertDialog.setMessage("Name or photo URL cannot be left blank");
@@ -86,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
                     pub = keyPair.getPublic();
                     String pubKeyHex = Hex.toHexString(pub.getEncoded());
 
-                    //Make the signatures
+                    // Make the signature
                     String sigHex = "";
                     String signingPayload = name + pictureUrl + pubKeyHex;
                     byte[] digested;
@@ -103,18 +101,44 @@ public class SignInActivity extends AppCompatActivity {
                             | java.security.InvalidKeyException
                             | java.security.NoSuchProviderException e) {}
 
-                    new PostCrypto().execute(name, pictureUrl, pubKeyHex, sigHex);
+                    // Upload this user to the server
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    //String url = "https://gatekeeper.ryanpetschek.me/upload";
+                    String url = "http://192.168.43.233:3000/upload";
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("hasAccount", true);
-                    editor.putString("name", name);
-                    editor.putString("imageUrl", pictureUrl);
-                    editor.commit();
+                    RequestParams params = new RequestParams();
+                    params.put("name", name);
+                    params.put("pictureURL", pictureUrl);
+                    params.put("publicKey", pubKeyHex);
+                    params.put("signature", sigHex);
 
-                    storeKeyPair(priv, pub);
+                    client.post(url, params, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putBoolean("hasAccount", true);
+                            editor.putString("name", name);
+                            editor.putString("imageUrl", pictureUrl);
+                            editor.commit();
 
-                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                    startActivity(intent);
+                            storeKeyPair(priv, pub);
+
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                            alertDialog.setTitle("Error");
+                            try {
+                                alertDialog.setMessage(response.getString("error"));
+                            }
+                            catch (JSONException err) {
+                                alertDialog.setMessage(err.getMessage());
+                            }
+                            alertDialog.show();
+                        }
+                    });
                 }
             });
         }
@@ -149,79 +173,5 @@ public class SignInActivity extends AppCompatActivity {
     private String getPublicKey() {
         SharedPreferences settings = getSharedPreferences("GK_settings", 0);
         return settings.getString("publicKey", "keyNotFound");
-    }
-
-    private class PostCrypto extends AsyncTask<String, Void, String> {
-
-        public PostCrypto() {}
-        @Override
-        public String doInBackground(String ... strings ) {
-            //Post everything to the Server
-            try {
-                URL url = new URL("https://gatekeeper.ryanpetschek.me/upload");
-                HttpsURLConnection connect = (HttpsURLConnection) url.openConnection();
-                connect.setRequestMethod("POST");
-                connect.setRequestProperty("User-Agent", "Fu[sic]GA");
-                connect.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-                connect.setRequestProperty("Content-Type", "application/json");
-                connect.setRequestProperty("Accept", "application/json");
-
-                JSONObject payload = new JSONObject();
-
-                try {
-                    payload.put("name", strings[0]);
-                    payload.put("pictureURL", strings[1]);
-                    payload.put("publicKey", strings[2]);
-                    payload.put("signature", strings[3]);
-                } catch (org.json.JSONException err) {
-                }
-
-                //Initiate the post
-                connect.setDoOutput(true);
-                DataOutputStream write = new DataOutputStream(connect.getOutputStream());
-                write.writeBytes(payload.toString());
-                write.flush();
-                write.close();
-
-                //Get response data
-                Integer respCode = connect.getResponseCode();
-                Log.d("RESPONSE-CODE: ", respCode.toString());
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connect.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-                String finalResp = response.toString();
-
-                //Parse the JSON
-                JSONObject jsonData = null;
-                try {
-                    jsonData = new JSONObject(finalResp);
-                } catch (org.json.JSONException err) {
-
-                }
-                try {
-                    jsonData.getBoolean("success");
-                    return null;
-                } catch (org.json.JSONException e) {
-                    try {
-                        return jsonData.getString("error");
-                    } catch (org.json.JSONException err) {
-                    }
-                }
-
-            } catch (ProtocolException err1) {
-                Log.e("ERROR", err1.getMessage());
-                err1.printStackTrace();
-            } catch (IOException err2) {
-                Log.e("ERROR", err2.getMessage());
-                err2.printStackTrace();
-            }
-            return null;
-        }
     }
 }
