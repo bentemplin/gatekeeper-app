@@ -83,6 +83,18 @@ public class SignInActivity extends AppCompatActivity {
                     client.post(url, params, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            button.setEnabled(true);
+                            if (statusCode != 200) {
+                                alertDialog.setTitle("Error");
+                                try {
+                                    alertDialog.setMessage(response.getString("error"));
+                                }
+                                catch (JSONException err) {
+                                    alertDialog.setMessage(err.getMessage());
+                                }
+                                alertDialog.show();
+                                return;
+                            }
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putBoolean("hasAccount", true);
                             editor.putString("name", name);
