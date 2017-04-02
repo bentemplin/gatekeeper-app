@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity
         ft.commit();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.menu_Name)).setText(settings.getString("name", "George P. Burdell"));
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.menu_PublicKey)).setText(settings.getString("publicKey", ""));
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
