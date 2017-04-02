@@ -16,57 +16,58 @@
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toTopOf="@+id/txtDescLabel" />
 
     <TextView
         android:id="@+id/txtAddress"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_width="223dp"
+        android:layout_height="38dp"
         android:ems="10"
         android:text="115 Bobby Dodd Way."
         android:textAlignment="viewEnd"
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtDesc" />
+        android:layout_marginBottom="74dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtDesc"
+        tools:layout_editor_absoluteX="145dp" />
 
     <TextView
         android:id="@+id/txtDesc"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_width="317dp"
+        android:layout_height="113dp"
+        android:layout_marginRight="49dp"
         android:ems="10"
         android:text="Best residence hall at Georgia Tech."
-        android:textAlignment="viewEnd"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
-        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnRequest" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescLabel" />
 
     <TextView
         android:id="@+id/txtDescLabel"
-        android:layout_width="1050dp"
+        android:layout_width="200dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="133dp"
+        android:layout_marginLeft="26dp"
         android:ems="10"
         android:text="Description:"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnRequest" />
+        app:layout_constraintBottom_toTopOf="@+id/btnRequest"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 
     <ImageView
         android:id="@+id/buildingImage"
         android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_height="175dp"
         android:layout_gravity="top"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"
@@ -92,23 +93,31 @@
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtAddressLabel" />
+        android:layout_marginBottom="-1dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtAddressLabel"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buildingImage"
+        app:layout_constraintVertical_bias="0.541" />
 
     <TextView
         android:id="@+id/txtName"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_width="241dp"
+        android:layout_height="37dp"
         android:ems="10"
         android:text="Hopkins Residence Hall"
         android:textAlignment="viewEnd"
         android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtAddress" />
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtAddress"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buildingImage"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteY="219dp"
+        tools:layout_editor_absoluteX="127dp" />
 
     <Button
         android:id="@+id/btnRequest"
